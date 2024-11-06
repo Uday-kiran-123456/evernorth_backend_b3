@@ -17,7 +17,7 @@ public class EmailService {
             message.setTo(toEmail);
             message.setSubject(subject);
             message.setText(body);
-            message.setFrom("makineni.uday@gmail.com");
+            message.setFrom("makineni.uday1@gmail.com");
 
             mailSender.send(message);
             System.out.println("Email sent to " + toEmail);
