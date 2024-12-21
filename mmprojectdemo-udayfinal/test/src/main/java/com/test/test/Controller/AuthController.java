@@ -12,12 +12,14 @@ import com.test.test.Repository.SecurityInformationRepository;
 import com.test.test.Repository.UserRepository;
 import com.test.test.Service.CustomerService;
 import com.test.test.Service.UserService;
+import com.test.test.Service.UserStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -46,6 +48,15 @@ public class AuthController {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;  // Add this for password hashing
+
+    @Autowired
+    private UserStatusService userStatusService;
+
+    // Endpoint to get the status of user presence in different tables using membershipId
+    @GetMapping("/user-status/{membershipId}")
+    public Map<String, Boolean> getUserStatus(@PathVariable String membershipId) {
+        return userStatusService.getUserStatus(membershipId);
+    }
 
     @GetMapping("/login")
     public ResponseEntity<String> login(

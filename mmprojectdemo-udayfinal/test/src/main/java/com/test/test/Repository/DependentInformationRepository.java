@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DependentInformationRepository extends JpaRepository<DependentInformation, Long> {
     // Additional custom queries can go here if needed
+    boolean existsByMembershipId(String membershipId);
 }

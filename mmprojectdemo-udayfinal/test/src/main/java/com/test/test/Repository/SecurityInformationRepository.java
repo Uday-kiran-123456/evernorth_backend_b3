@@ -10,5 +10,6 @@ public interface SecurityInformationRepository extends JpaRepository<SecurityInf
     // You can add custom queries if needed (like finding by membershipId)
     SecurityInformation findByMembershipId(String membershipId);
     Optional<SecurityInformation> findByMembershipIdAndPassword(String membershipId, String password);
+    boolean existsByMembershipId(String membershipId);
 }
 

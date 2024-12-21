@@ -2,11 +2,13 @@ package com.test.test.Controller;
 
 import com.test.test.Entity.User;
 import com.test.test.Service.UserService;
+import com.test.test.Service.UserStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -27,5 +29,4 @@ public class UserController {
         return user.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
 }

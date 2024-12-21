@@ -11,4 +11,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     long count(); // Returns the count of customers in the table
     Optional<Customer> findByMembershipId(String membershipId);
     Optional<Customer> findByEmail(String email);
+    boolean existsByMembershipId(String membershipId);
 }

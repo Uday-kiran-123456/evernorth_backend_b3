@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface HealthInformationRepository extends JpaRepository<com.test.test.Entity.HealthInformation, Long> {
+    boolean existsByMembershipId(String membershipId);
 }

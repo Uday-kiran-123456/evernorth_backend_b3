@@ -154,18 +154,11 @@ public class PrimaryUserController {
     public ResponseEntity<PrimaryUser> createUser(@RequestBody PrimaryUser primaryUser) {
         PrimaryUser savedUser = primaryUserService.saveUser(primaryUser);
         String membershipId = savedUser.getMembershipId();
-
-        // Generate OTP and store it in otpStor
-
-        // Send OTP email
         String profileSetupLink = "http://localhost:5173/signuppage";
         String emailSubject = "Signup to Evernorth Health Services";
-        String emailBody = "To initilaize your profile setup, visit the following link:\n" + profileSetupLink;
-
-        // Send email
+        String emailBody = "To initialize your profile setup, visit the following link:\n" + profileSetupLink;
         emailService.sendEmail(primaryUser.getEmail(), emailSubject, emailBody);
-
-        // Return the saved user and a message indicating OTP has been sent
+        emailService.sendSms(primaryUser.getPhone(), emailBody);
         return ResponseEntity.ok(savedUser);
     }
 

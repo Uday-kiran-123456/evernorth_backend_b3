@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface PrimaryUserRepository extends JpaRepository<PrimaryUser, Long> {
     // Additional custom query methods (if needed) can be added here
     Optional<PrimaryUser> findByMembershipId(String membershipId);
+    boolean existsByMembershipId(String membershipId);
 }
