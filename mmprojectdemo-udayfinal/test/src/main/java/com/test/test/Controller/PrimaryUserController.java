@@ -51,6 +51,16 @@ public class PrimaryUserController {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @GetMapping("/validateMembershipId/{membershipId}")
+    public ResponseEntity<?> validateMembershipId(@PathVariable String membershipId) {
+        boolean exists = primaryUserService.isMembershipIdExists(membershipId);
+        if (exists) {
+            return ResponseEntity.ok("Membership ID is valid");
+        } else {
+            return ResponseEntity.status(404).body("Membership ID not found");
+        }
+    }
+
     @PostMapping("/dependent-information")
     public ResponseEntity<String> saveDependentInformation(@RequestBody DependentInformation dependentInformation) {
         try {

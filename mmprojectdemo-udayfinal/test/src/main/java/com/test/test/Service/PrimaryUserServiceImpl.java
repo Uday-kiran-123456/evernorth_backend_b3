@@ -26,6 +26,12 @@ public class PrimaryUserServiceImpl implements PrimaryUserService {
     }
 
     @Override
+    public boolean isMembershipIdExists(String membershipId) {
+        return primaryUserRepository.existsByMembershipId(membershipId);
+    }
+
+
+    @Override
     public List<PrimaryUser> getAllUsers() {
         return primaryUserRepository.findAll();
     }

@@ -93,7 +93,7 @@ public class AuthController {
             Customer savedCustomer = customerService.registerCustomer(customer);
             return ResponseEntity.ok("User registered successfully with Membership ID: " + savedCustomer.getMembershipId());
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error: " + e.getMessage());
+            return ResponseEntity.status(400).body("Error: " + e.getMessage());
         }
     }
 }

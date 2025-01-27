@@ -12,6 +12,7 @@ public interface PrimaryUserService {
     PrimaryUser updateUser(Long id, PrimaryUser primaryUser);
     void deleteUser(Long id);
     PrimaryUser getUserByMembershipId(String membershipId);
+    boolean isMembershipIdExists(String membershipId);
     public void saveOtpForUser(Long userId, String otp);
     public boolean verifyOtp(Long userId, String otp);
 }

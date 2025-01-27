@@ -14,7 +14,7 @@ public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Auto-increment primary key
+    private Long id;
 
     @Column(name = "membership_id", unique = true, nullable = false)
     private String membershipId;
