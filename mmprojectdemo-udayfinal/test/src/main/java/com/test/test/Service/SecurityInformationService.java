@@ -1,5 +1,6 @@
 package com.test.test.Service;
 
+import com.test.test.Entity.PaymentInformation;
 import com.test.test.Entity.SecurityInformation;
 import com.test.test.Repository.SecurityInformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,9 @@ public class SecurityInformationService {
 
     public boolean validateUser(String membershipId, String password) {
         return repository.findByMembershipIdAndPassword(membershipId, password).isPresent();
+    }
+
+    public SecurityInformation getSecurityInfo(String membershipId) {
+        return repository.findByMembershipId(membershipId);
     }
 }

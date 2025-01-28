@@ -1,5 +1,6 @@
 package com.test.test.Service;
 
+import com.test.test.Entity.DeliveryAddressInformation;
 import com.test.test.Entity.DependentInformation;
 import com.test.test.Repository.DependentInformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,5 +14,9 @@ public class DependentInformationService {
 
     public DependentInformation saveDependentInformation(DependentInformation dependentInformation) {
         return dependentInformationRepository.save(dependentInformation);
+    }
+
+    public DependentInformation getDependentInfo(String membershipId) {
+        return dependentInformationRepository.findByMembershipId(membershipId);
     }
 }

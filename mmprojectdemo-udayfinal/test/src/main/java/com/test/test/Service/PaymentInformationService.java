@@ -14,5 +14,9 @@ public class PaymentInformationService {
     public PaymentInformation savePaymentInformation(PaymentInformation paymentInformation) {
         return paymentInformationRepository.save(paymentInformation);
     }
+
+    public PaymentInformation getPaymentInfo(String membershipId) {
+        return paymentInformationRepository.findByMembershipId(membershipId);
+    }
 }
 

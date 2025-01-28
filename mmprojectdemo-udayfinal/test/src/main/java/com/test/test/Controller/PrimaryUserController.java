@@ -2,8 +2,7 @@ package com.test.test.Controller;
 
 import com.test.test.DTO.CustomerDetailsResponse;
 import com.test.test.Entity.*;
-import com.test.test.Repository.ContactInformationRepository;
-import com.test.test.Repository.CustomerRepository;
+import com.test.test.Repository.*;
 import com.test.test.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,16 +33,31 @@ public class PrimaryUserController {
     private DeliveryAddressService deliveryAddressService;
 
     @Autowired
+    private DeliveryAddressRepository deliveryAddressRepository;
+
+    @Autowired
     private HealthInformationService healthInformationService;
+
+    @Autowired
+    private HealthInformationRepository healthInformationRepository;
 
     @Autowired
     private PaymentInformationService paymentInformationService;
 
     @Autowired
+    private PaymentInformationRepository paymentInformationRepository;
+
+    @Autowired
     private SecurityInformationService securityInformationService;
 
     @Autowired
+    private SecurityInformationRepository securityInformationRepository;
+
+    @Autowired
     private DependentInformationService dependentInformationService;
+
+    @Autowired
+    private DependentInformationRepository dependentInformationRepository;
 
     @Autowired
     private CustomerService customerService;
@@ -72,6 +86,43 @@ public class PrimaryUserController {
         }
     }
 
+    @GetMapping("/dependent/{membershipId}")
+    public DependentInformation getDependentInfo(@PathVariable String membershipId) {
+        return dependentInformationService.getDependentInfo(membershipId);
+    }
+
+    @PutMapping("/dependent/{membershipId}")
+    public ResponseEntity<DependentInformation> updateDependentInformation(
+            @PathVariable String membershipId,
+            @RequestBody DependentInformation dependentInformation) {
+
+        Optional<DependentInformation> existingDependent = Optional.ofNullable(dependentInformationRepository.findByMembershipId(membershipId));
+
+        if (existingDependent.isPresent()) {
+            DependentInformation updatedDependent  = existingDependent.get();
+
+            // Update the fields (assuming fields in your form match the entity)
+            updatedDependent.setName(dependentInformation.getName());
+            updatedDependent.setRelationship(dependentInformation.getRelationship());
+            updatedDependent.setAge(dependentInformation.getAge());
+            updatedDependent.setAddress(dependentInformation.getAddress());
+            updatedDependent.setHealthCondition(dependentInformation.getHealthCondition());
+            updatedDependent.setChronicIllness(dependentInformation.getChronicIllness());
+            updatedDependent.setChronicIllnessDetails(dependentInformation.getChronicIllnessDetails());
+            updatedDependent.setAllergies(dependentInformation.getAllergies());
+            updatedDependent.setMedications(dependentInformation.getMedications());
+            updatedDependent.setEmergencyContactName(dependentInformation.getEmergencyContactName());
+            updatedDependent.setEmergencyContactPhone(dependentInformation.getEmergencyContactPhone());
+
+            // Save the updated contact information
+            DependentInformation savedDependent = dependentInformationRepository.save(updatedDependent);
+
+            return ResponseEntity.ok(savedDependent);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
     // Endpoint to save security information
     @PostMapping("/security-information")
     public String saveSecurityInformation(@RequestBody SecurityInformation securityInformation) {
@@ -80,6 +131,35 @@ public class PrimaryUserController {
 
         // Return a success message
         return "Security information saved successfully!";
+    }
+
+    @GetMapping("/security/{membershipId}")
+    public SecurityInformation getSecurityInfo(@PathVariable String membershipId) {
+        return securityInformationService.getSecurityInfo(membershipId);
+    }
+
+    @PutMapping("/security/{membershipId}")
+    public ResponseEntity<SecurityInformation> updateSecurityInformation(
+            @PathVariable String membershipId,
+            @RequestBody SecurityInformation securityInformation) {
+
+        Optional<SecurityInformation> existingSecurity = Optional.ofNullable(securityInformationRepository.findByMembershipId(membershipId));
+
+        if (existingSecurity.isPresent()) {
+            SecurityInformation updatedSecurity = existingSecurity.get();
+
+            // Update the fields (assuming fields in your form match the entity)
+            updatedSecurity.setPassword(securityInformation.getPassword());
+            updatedSecurity.setSecurityAnswer(securityInformation.getSecurityAnswer());
+            updatedSecurity.setSecurityQuestion(securityInformation.getSecurityQuestion());
+
+            // Save the updated contact information
+            SecurityInformation savedSecurity = securityInformationRepository.save(updatedSecurity);
+
+            return ResponseEntity.ok(savedSecurity);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @PostMapping("/payment-information")
@@ -93,12 +173,77 @@ public class PrimaryUserController {
         }
     }
 
+    @GetMapping("/payments/{membershipId}")
+    public PaymentInformation getPaymentInfo(@PathVariable String membershipId) {
+        return paymentInformationService.getPaymentInfo(membershipId);
+    }
+
+    @PutMapping("/payments/{membershipId}")
+    public ResponseEntity<PaymentInformation> updatePaymentInformation(
+            @PathVariable String membershipId,
+            @RequestBody PaymentInformation paymentInformation) {
+
+        Optional<PaymentInformation> existingPayment = Optional.ofNullable(paymentInformationRepository.findByMembershipId(membershipId));
+
+        if (existingPayment.isPresent()) {
+            PaymentInformation updatedPayment = existingPayment.get();
+
+            // Update the fields (assuming fields in your form match the entity)
+            updatedPayment.setCardHolderName(paymentInformation.getCardHolderName());
+            updatedPayment.setCardNumber(paymentInformation.getCardNumber());
+            updatedPayment.setExpirationDate(paymentInformation.getExpirationDate());
+            updatedPayment.setCvv(paymentInformation.getCvv());
+            updatedPayment.setDebitCardHolderName(paymentInformation.getDebitCardHolderName());
+            updatedPayment.setDebitCardNumber(paymentInformation.getDebitCardNumber());
+            updatedPayment.setUpiId(paymentInformation.getUpiId());
+
+            // Save the updated contact information
+            PaymentInformation savedPayment = paymentInformationRepository.save(updatedPayment);
+
+            return ResponseEntity.ok(savedPayment);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
     @PostMapping("/health-information")
     public String submitHealthInformation(@RequestBody HealthInformation healthInformation) {
         if (healthInformationService.saveHealthInformation(healthInformation)) {
             return "Health information submitted successfully!";
         } else {
             return "Failed to submit health information.";
+        }
+    }
+
+    @GetMapping("/healthConditions/{membershipId}")
+    public HealthInformation getHealthInfo(@PathVariable String membershipId) {
+        return healthInformationService.getHealthInfo(membershipId);
+    }
+
+    @PutMapping("/healthConditions/{membershipId}")
+    public ResponseEntity<HealthInformation> updateHealthInformation(
+            @PathVariable String membershipId,
+            @RequestBody HealthInformation healthInformation) {
+
+        Optional<HealthInformation> existingHealth = Optional.ofNullable(healthInformationRepository.findByMembershipId(membershipId));
+
+        if (existingHealth.isPresent()) {
+            HealthInformation updatedHealth = existingHealth.get();
+
+            // Update the fields (assuming fields in your form match the entity)
+            updatedHealth.setHasChronicIllness(healthInformation.getHasChronicIllness());
+            updatedHealth.setChronicIllnessDetails(healthInformation.getChronicIllnessDetails());
+            updatedHealth.setAllergies(healthInformation.getAllergies());
+            updatedHealth.setCurrentMedications(healthInformation.getCurrentMedications());
+            updatedHealth.setEmergencyContactName(healthInformation.getEmergencyContactName());
+            updatedHealth.setEmergencyContactPhone(healthInformation.getEmergencyContactPhone());
+
+            // Save the updated contact information
+            HealthInformation savedHealth = healthInformationRepository.save(updatedHealth);
+
+            return ResponseEntity.ok(savedHealth);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
@@ -110,6 +255,38 @@ public class PrimaryUserController {
             return ResponseEntity.ok("Address submitted successfully.");
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to submit address.");
+        }
+    }
+
+    @GetMapping("/delivery/{membershipId}")
+    public DeliveryAddressInformation getDeliveryInfo(@PathVariable String membershipId) {
+        return deliveryAddressService.getDeliveryAddressInfo(membershipId);
+    }
+
+    @PutMapping("/delivery/{membershipId}")
+    public ResponseEntity<DeliveryAddressInformation> updateDeliveryInformation(
+            @PathVariable String membershipId,
+            @RequestBody DeliveryAddressInformation addressInformation) {
+
+        Optional<DeliveryAddressInformation> existingAddress = Optional.ofNullable(deliveryAddressRepository.findByMembershipId(membershipId));
+
+        if (existingAddress.isPresent()) {
+            DeliveryAddressInformation updatedAddress = existingAddress.get();
+
+            // Update the fields (assuming fields in your form match the entity)
+            updatedAddress.setHomeNumber(addressInformation.getHomeNumber());
+            updatedAddress.setStreet(addressInformation.getStreet());
+            updatedAddress.setCity(addressInformation.getCity());
+            updatedAddress.setState(addressInformation.getState());
+            updatedAddress.setPinCode(addressInformation.getPinCode());
+            updatedAddress.setCountry(addressInformation.getCountry());
+
+            // Save the updated contact information
+            DeliveryAddressInformation savedAddress = deliveryAddressRepository.save(updatedAddress);
+
+            return ResponseEntity.ok(savedAddress);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 

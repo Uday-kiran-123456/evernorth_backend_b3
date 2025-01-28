@@ -20,5 +20,9 @@ public class DeliveryAddressService {
             return false;
         }
     }
+
+    public DeliveryAddressInformation getDeliveryAddressInfo(String membershipId) {
+        return deliveryAddressRepository.findByMembershipId(membershipId);
+    }
 }
 
